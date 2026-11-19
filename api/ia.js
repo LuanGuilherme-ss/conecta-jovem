@@ -1,7 +1,7 @@
 // Função na nuvem que o ia.html chama em /api/ia
 // Recebe { texto } e devolve { resumo, palavras_chave, nivel }
 
-const URL_IA = 'https://api.cloudflare.com/client/v4/accounts/0a0899cb8b47c623615743035a2f26b9/ai/v1/chat/completions';
+const URL_IA = 'https://api.cloudflare.com/client/v4/accounts/850965d114844b82ed7b5faeaf10b4d1/ai/v1/chat/completions';
 const MODELO = '@cf/mistralai/mistral-small-3.1-24b-instruct';
 
 const INSTRUCAO = `Você é um assistente de estudos.
