@@ -4,32 +4,210 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resumidor de estudos com IA</title>
+  <!-- Importando uma fonte moderna do Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #fff7f0; }
-    main { max-width: 640px; margin: 0 auto; padding: 24px; }
-    textarea { width: 100%; box-sizing: border-box; padding: 12px; font-size: 16px; }
-    button { margin-top: 12px; padding: 12px 20px; font-size: 16px; border: 0;
-             border-radius: 8px; background: #e70beb; color: white; }
-    button:disabled { background: #bbb; }
-    .etiqueta { display: inline-block; background: #848383; border-radius: 12px;
-                padding: 4px 10px; margin: 4px 4px 0 0; }
-    .aviso { font-size: 13px; color: #777; }
+    :root {
+      --cor-primaria: #8b5cf6;
+      --cor-primaria-hover: #7c3aed;
+      --cor-fundo: #f3f4f6;
+      --cor-cartao: #ffffff;
+      --cor-texto: #1f2937;
+      --cor-texto-suave: #6b7280;
+      --cor-borda: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+      color: var(--cor-texto);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 640px;
+      background: var(--cor-cartao);
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+    }
+
+    header {
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .subtitulo {
+      font-size: 15px;
+      color: var(--cor-texto-suave);
+      line-height: 1.5;
+    }
+
+    .campo-texto {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--cor-texto);
+      background-color: #f9fafb;
+      border: 2px solid var(--cor-borda);
+      border-radius: 12px;
+      resize: vertical;
+      transition: all 0.2s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      background-color: #ffffff;
+      border-color: var(--cor-primaria);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+    }
+
+    .contador {
+      text-align: right;
+      font-size: 12px;
+      color: var(--cor-texto-suave);
+      margin-top: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px 24px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      border: 0;
+      border-radius: 12px;
+      background: var(--cor-primaria);
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.2);
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--cor-primaria-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 10px -1px rgba(139, 92, 246, 0.3);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Área de resultado */
+    #resultado:not(:empty) {
+      margin-top: 24px;
+      padding: 20px;
+      background-color: #f8fafc;
+      border: 1px solid var(--cor-borda);
+      border-radius: 12px;
+      animation: surgir 0.3s ease-out;
+    }
+
+    #resultado p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #334155;
+      margin-bottom: 14px;
+    }
+
+    #resultado p:last-child {
+      margin-bottom: 0;
+    }
+
+    .etiqueta {
+      display: inline-block;
+      background: #ede9fe;
+      color: #6d28d9;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 20px;
+      padding: 5px 12px;
+      margin: 4px 6px 0 0;
+      border: 1px solid #ddd6fe;
+    }
+
+    .aviso {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid var(--cor-borda);
+      font-size: 12px;
+      color: var(--cor-texto-suave);
+      text-align: center;
+    }
+
+    @keyframes surgir {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>Resumidor de estudos</h1>
-    <p>Cole um texto e a IA devolve um resumo e as palavras-chave.</p>
-    <textarea id="texto" rows="8" maxlength="2000"
-              placeholder="Cole aqui um texto de até 2.000 caracteres"></textarea>
+    <header>
+      <h1>✨ Resumidor de estudos</h1>
+      <p class="subtitulo">Cole um texto abaixo e a IA vai gerar um resumo direto ao ponto e destacar as palavras-chave.</p>
+    </header>
+
+    <div class="campo-texto">
+      <textarea id="texto" rows="7" maxlength="2000"
+                placeholder="Cole aqui o conteúdo da sua matéria (até 2.000 caracteres)..."></textarea>
+      <div class="contador"><span id="chars">0</span> / 2000</div>
+    </div>
+
     <button id="botao">Resumir com IA</button>
+    
     <div id="resultado"></div>
-    <p class="aviso">Respostas geradas por inteligência artificial podem conter erros.
-      Não envie dados pessoais.</p>
+    
+    <p class="aviso">Respostas geradas por inteligência artificial podem conter erros. Não envie dados pessoais.</p>
   </main>
+
   <script>
     const botao = document.getElementById('botao');
     const resultado = document.getElementById('resultado');
+    const textarea = document.getElementById('texto');
+    const chars = document.getElementById('chars');
+
+    // Atualiza o contador de caracteres em tempo real
+    textarea.addEventListener('input', () => {
+      chars.textContent = textarea.value.length;
+    });
 
     function mostrar(dados) {
       resultado.replaceChildren();                // limpa o resultado anterior
@@ -39,19 +217,20 @@
       for (const palavra of dados.palavras_chave || []) {
         const etiqueta = document.createElement('span');
         etiqueta.className = 'etiqueta';
-        etiqueta.textContent = palavra;
+        etiqueta.textContent = '#' + palavra;
         resultado.appendChild(etiqueta);
       }
     }
 
     botao.addEventListener('click', async () => {
-      const texto = document.getElementById('texto').value.trim();
+      const texto = textarea.value.trim();
       if (!texto) {
-        resultado.textContent = 'Digite ou cole um texto primeiro.';
+        resultado.textContent = '⚠️ Digite ou cole um texto primeiro.';
         return;
       }
       botao.disabled = true;                      // evita cliques repetidos
-      resultado.textContent = 'Pensando...';
+      botao.textContent = 'Resumindo...';
+      resultado.textContent = '⏳ Analisando o texto e gerando resumo...';
       try {
         const resposta = await fetch('/api/ia', {
           method: 'POST',
@@ -62,12 +241,13 @@
         if (resposta.ok) {
           mostrar(dados);
         } else {
-          resultado.textContent = dados.erro;
+          resultado.textContent = '❌ ' + dados.erro;
         }
       } catch (erro) {
-        resultado.textContent = 'Sem conexão com o servidor. Tente de novo.';
+        resultado.textContent = '🔌 Sem conexão com o servidor. Tente de novo.';
       } finally {
         botao.disabled = false;
+        botao.textContent = 'Resumir com IA';
       }
     });
   </script>
